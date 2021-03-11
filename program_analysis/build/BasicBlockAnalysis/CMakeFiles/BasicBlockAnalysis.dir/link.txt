@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC   -shared  -o libBasicBlockAnalysis.so CMakeFiles/BasicBlockAnalysis.dir/bb_analysis.cpp.o  -L/home/lab/compiler/soft/llvm_4.0/build/./lib 

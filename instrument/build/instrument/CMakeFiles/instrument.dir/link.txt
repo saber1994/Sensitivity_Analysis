@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC   -shared  -o libinstrument.so CMakeFiles/instrument.dir/instrument.cpp.o  -L/home/lab/compiler/soft/llvm_4.0/build/./lib 
