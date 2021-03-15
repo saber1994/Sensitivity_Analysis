@@ -1,4 +1,4 @@
-# Install script for directory: /home/lab/workspace/jintingRen/src/sensivity_analysis/fault_injection/src/FaultInjection
+# Install script for directory: /home/lab/workspace/jintingRen/src/sensivity_analysis/source_code/Sensitivity_Analysis/fault_injection/FaultInjection
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

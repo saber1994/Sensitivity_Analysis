@@ -1,5 +1,5 @@
-#include"FaultInjection.h"
-#include"PreProcess.h"
+#include "FaultInjection.h"
+#include "PreProcess.h"
 #include "llvm/IR/CFG.h"
 #include <fstream>
 #include <sys/time.h>
@@ -173,7 +173,7 @@ Instruction* FaultInjection::insertFaultCallforMulti (Instruction* target,int nu
 				if (width == 0){
 						width = 64;
 				}
-				unsigned long long xor_value = 0;
+				__int128 xor_value = 0;
 				struct timeval time;
 
 				if(singleInstruction){
@@ -202,10 +202,8 @@ Instruction* FaultInjection::insertFaultCallforMulti (Instruction* target,int nu
 					xor_value = 1<<(rand()%width);
 				}
 				Type* cast_type;
-				if (width<=64)
-						cast_type = Type::getIntNTy(context,width);
-				else
-						cast_type = Type::getInt64Ty(context);
+                cast_type = Type::getIntNTy(context,width);;	
+                
 				injectArgs.push_back(ConstantInt::get(cast_type,xor_value,false));
 				IRBuilder<> builder(context);
         CallInst* callInject = builder.CreateCall(injectFunction,injectArgs);
@@ -247,10 +245,7 @@ void FaultInjection::createFaultInjectionFunctionforMulti (Type* target_type,Glo
 	paramsRef[0] = target_type;
 	paramsRef[1] = Type::getInt64Ty(context);
 	Type *cast_type;
-	if (width<=64)
-			cast_type = Type::getIntNTy(context,width);
-	else
-			cast_type = Type::getInt64Ty(context);
+	cast_type = Type::getIntNTy(context,width);    
 	paramsRef[2] = cast_type;
 
 	ArrayRef<Type*> faultInjectParams(paramsRef);
