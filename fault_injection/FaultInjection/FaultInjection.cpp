@@ -716,28 +716,29 @@ BasicBlock* FaultInjection::constructPrintfBlock(BasicBlock* post_block, Module 
 	BasicBlock *printf_block = BasicBlock::Create(post_block->getContext(),"Printf_Block",post_block->getParent(),post_block);
 	BranchInst *printf_branch = BranchInst::Create(post_block,printf_block);
 	std::string logString = "Fault has been injected!\n";
-  Constant *logFormat = ConstantDataArray::getString(M.getContext(), logString, true);
-  GlobalVariable *logFormatVar = new GlobalVariable(M, logFormat->getType(), true,
+    Constant *logFormat = ConstantDataArray::getString(M.getContext(), logString, true);
+    GlobalVariable *logFormatVar = new GlobalVariable(M, logFormat->getType(), true,
 	GlobalValue::InternalLinkage,logFormat, "logFormat",NULL,
 	GlobalValue::NotThreadLocal, 0, false);
 
 	//set GEP instruction params
-  Value *elementPtrIndices[2];
-  elementPtrIndices[0] = elementPtrIndices[1] = ConstantInt::get(Type::getInt32Ty(M.getContext()), 0, false);
+    Value *elementPtrIndices[2];
+    elementPtrIndices[0] = elementPtrIndices[1] = ConstantInt::get(Type::getInt32Ty(M.getContext()), 0, false);
 	ArrayRef<Value *> ptrIndicesRef(elementPtrIndices);
-	//get(insert optionally) printf function
-  Type *printfParams[1];
-  printfParams[0] = Type::getInt8PtrTy(M.getContext());
-  ArrayRef<Type *> paramsRef(printfParams);
-  FunctionType *printfType = FunctionType::get(Type::getInt32Ty(M.getContext()), paramsRef,true);
+	
+    //get(insert optionally) printf function
+    Type *printfParams[1];
+    printfParams[0] = Type::getInt8PtrTy(M.getContext());
+    ArrayRef<Type *> paramsRef(printfParams);
+    FunctionType *printfType = FunctionType::get(Type::getInt32Ty(M.getContext()), paramsRef,true);
 
 	Constant *printf = M.getOrInsertFunction("printf", printfType);
-  std::vector<Value *> printArgs;
+    std::vector<Value *> printArgs;
 	Type* PointeeType = cast<PointerType>(logFormatVar->getType()->getScalarType())->getElementType();
-  Value *formatGetInst = GetElementPtrInst::Create(PointeeType,logFormatVar, ptrIndicesRef,"",printf_branch);
-  printArgs.push_back(formatGetInst);
-  CallInst::Create(printf,printArgs,"",printf_branch);
-  return printf_block;
+    Value *formatGetInst = GetElementPtrInst::Create(PointeeType,logFormatVar, ptrIndicesRef,"",printf_branch);
+    printArgs.push_back(formatGetInst);
+    CallInst::Create(printf,printArgs,"",printf_branch);
+    return printf_block;
 }
 
 char FaultInjection::ID = 0;
